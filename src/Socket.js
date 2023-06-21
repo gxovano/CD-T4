@@ -3,10 +3,10 @@ import { Buffer } from 'node:buffer';
 
 class Socket {
     #instanceSocket; 
-    emitter;
-    constructor(port, emitter) {
-        this.emitter = emitter;
-        this.#instantiateSocket(port, emitter);
+    eventBus;
+    constructor(port, eventBus) {
+        this.eventBus = eventBus;
+        this.#instantiateSocket(port, eventBus);
     }
 
     #instantiateSocket(port) {
@@ -20,12 +20,17 @@ class Socket {
         this.#instanceSocket.on('message', (msg, rinfo) => {
             //console.log(`server got: ${msg} from ${rinfo.address}:${rinfo.port}`);
             let message = JSON.parse(msg);
-            this.emitter.emit('newMessageFromSocket', message, rinfo.address, rinfo.port);
+            this.eventBus.emit('newMessageFromSocket', message, rinfo.address, rinfo.port);
         });
         
         this.#instanceSocket.on('listening', () => {
             const address = this.#instanceSocket.address();
             //console.log(`[SOCKET] Listening on ${address.address}:${address.port}`);
+        });
+
+        this.eventBus.on('storeInAnotherNode', (message) => {
+            // console.log(this.eventBus.remote())
+            this.send(message, this.eventBus.remote().ip, this.eventBus.remote().port);
         });
         
         this.#instanceSocket.bind(port);

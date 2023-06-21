@@ -8,9 +8,10 @@ class Router {
     outputQueue; 
     inputSocket; 
 
-    constructor(connectionInfo, eventBus) {
+    constructor(connectionInfo, eventBus, dht) {
         this.connectionInfo = connectionInfo;
         this.eventBus = eventBus; 
+        this.dht = dht
         this.inputQueue = new Queue();
         this.outputQueue = new Queue();
         this.inputSocket = new Socket(connectionInfo.port, this.eventBus);
@@ -21,7 +22,8 @@ class Router {
         // Enfileira mensagens do socket  
         this.eventBus.on('newMessageFromSocket', (message, ip, port) => {
             console.log(`Enfileirando mensagem de ${ip}:${port}`);
-            this.inputQueue.enqueue(message);
+            // this.inputQueue.enqueue(message);
+            this.dht.handleOperation(message)
         });
         // Envia mensagem para destino  
         this.eventBus.on('newMessageToOutput', (message,ip,port) => {
