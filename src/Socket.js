@@ -18,18 +18,15 @@ class Socket {
         });
         
         this.#instanceSocket.on('message', (msg, rinfo) => {
-            //console.log(`server got: ${msg} from ${rinfo.address}:${rinfo.port}`);
             let message = JSON.parse(msg);
             this.eventBus.emit('newMessageFromSocket', message, rinfo.address, rinfo.port);
         });
         
         this.#instanceSocket.on('listening', () => {
             const address = this.#instanceSocket.address();
-            //console.log(`[SOCKET] Listening on ${address.address}:${address.port}`);
         });
 
-        this.eventBus.on('storeInAnotherNode', (message) => {
-            // console.log(this.eventBus.remote())
+        this.eventBus.on('sendToAnotherNode', (message) => {
             this.send(message, this.eventBus.remote().ip, this.eventBus.remote().port);
         });
         

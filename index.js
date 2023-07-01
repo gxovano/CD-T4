@@ -25,23 +25,3 @@ connections.then(
   }
 );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-const testSendMessages = async (connections) => {
-  await new Promise(r => setTimeout(r, 3000));
-  let message = {type: 'msg', description: 'dep100'}; 
-  eventBus.emit('newMessageToOutputToAll', message, connections);
-  await new Promise(r => setTimeout(r, 1000));
-  eventBus.emit('displayMessages');
-}

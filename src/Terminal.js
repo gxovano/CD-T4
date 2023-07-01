@@ -18,7 +18,9 @@ class Terminal {
     }
 
     async actionSearch() {
-        console.log('actionSearch')
+        const rg = await input({ message: 'Informe o RG' });
+
+        console.log(this.dht.search(rg));
     }
 
     async actionShowAll() {

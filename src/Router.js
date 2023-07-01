@@ -21,8 +21,6 @@ class Router {
     #defineEvents() {
         // Enfileira mensagens do socket  
         this.eventBus.on('newMessageFromSocket', (message, ip, port) => {
-            console.log(`Enfileirando mensagem de ${ip}:${port}`);
-            // this.inputQueue.enqueue(message);
             this.dht.handleOperation(message)
         });
         // Envia mensagem para destino  
@@ -37,7 +35,7 @@ class Router {
         });
         // Exibe as mensagens na fila de entrada  
         this.eventBus.on('displayMessages', () => {
-            console.log(this.inputQueue);
+            //console.log(this.inputQueue);
         });
     }
 }
